@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             // $table->foreignId('id_pasien')->constrained()->OnDelete('cascade');
             // $table->foreignId('id_pasien')->constrained()->OnDelete('cascade');
-            $table->unsignedBigInteger('id_pasien')->constrained()->OnDelete('cascade');
-            $table->unsignedBigInteger('id_dokter')->constrained()->OnDelete('cascade');
+            $table->foreignId('id_pasien')->constrained('users')->OnDelete('cascade');
+            $table->foreignId('id_dokter')->constrained('users')->OnDelete('cascade');
             $table->dateTime('tgl_periksa');
             $table->longText('catatan');
             $table->bigInteger('biaya_periksa');

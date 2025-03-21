@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('detail_periksas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_periksa')->constrained()->OnDelete('cascade');
-            $table->unsignedBigInteger('id_obat')->constrained()->OnDelete('cascade');
+            $table->foreignId('id_periksa')->constrained('periksas')->OnDelete('cascade');
+            $table->foreignId('id_obat')->constrained('obats')->OnDelete('cascade');
             $table->timestamps();
         });
     }
