@@ -20,7 +20,7 @@
                 <div class="col-lg-8 mx-auto text-center py-5">
                     <i class="fas fa-hospital fa-3x mb-4"></i>
                     <h1 class="display-4 fw-bold mb-4">Sugeng</h1>
-                    <p>Hospital Management System</p>
+                    <p>Policlinics Management System</p>
 
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
                         <a href="/auth/login" class="btn btn-light btn-lg px-4 me-md-2">

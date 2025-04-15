@@ -98,7 +98,7 @@
             <a href="index3.html" class="brand-link">
                 <img src="{{asset('lte\dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Sugeng Hospital</span>
+                <span class="brand-text font-weight-light">Sugeng Poli</span>
             </a>
 
             <!-- Sidebar -->
@@ -110,7 +110,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Admin Cuy</a>
+                        <a href="#" class="d-block">Admin Cihuy</a>
                     </div>
                 </div>
 
@@ -158,7 +158,6 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             @yield('content')
-
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
@@ -183,7 +182,7 @@
     <script src="{{asset('lte\plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-    $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{asset('lte\plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -211,6 +210,8 @@
     <script src="{{asset('lte\dist/js/demo.js')}}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{asset('lte\dist/js/pages/dashboard.js')}}"></script>
+
+    @yield('scripts')
 </body>
 
 </html>

@@ -10,12 +10,27 @@ class PeriksaController extends Controller
 {
     public function index()
     {
-        // Fetch only users with role='dokter'
-        $dokters = User::where('role', 'dokter')->get();
+        $periksas = Periksa::latest()->get();
 
-        // Other data you need
-        $periksas = Periksa::all();
+        return view('pasien.periksa.index', compact('periksas'));
+    }
+    public function create()
+    {
+        $pasiens = User::where('role', 'pasien')->latest()->get();
+        $dokters = User::where('role', 'dokter')->latest()->get();
 
-        return view('pasien.periksa', compact('dokters', 'periksas'));
+        return view('pasien.periksa.create', compact('dokters', 'pasiens'));
+    }
+
+    public function store(Request $req)
+    {
+        $req->validate([
+            'id_pasien' => ['required', 'integer'],
+            'id_dokter' => ['required', 'integer'],
+        ]);
+
+        Periksa::create($req->all());
+
+        return redirect('pasien/periksa')->with('success', 'Berhasil Meminta Pemeriksaan');
     }
 }

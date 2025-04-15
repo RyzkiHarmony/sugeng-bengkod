@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sugeng Hospital</title>
+    <title>Login | Sugeng Poli</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
                     <div class="card-body p-5">
                         <div class="text-center mb-4">
                             <i class="fas fa-hospital text-primary fa-3x mb-3"></i>
-                            <h3 class="fw-bold">Sugeng Hospital</h3>
+                            <h3 class="fw-bold">Sugeng Poli</h3>
                             <p class="text-muted">Login to access your account</p>
                         </div>
 

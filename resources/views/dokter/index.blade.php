@@ -1,16 +1,16 @@
 @extends('layout.app')
 
-@section('title', 'Dashboard Dokter')
+@section('title', 'Sugeng | Dokter Dashboard')
 
 @section('nav-item')
     <li class="nav-item">
-        <a href="./memeriksa" class="nav-link">
+        <a href="/dokter/memeriksa" class="nav-link">
             <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
             <p>Memeriksa</p>
         </a>
     </li>
     <li class="nav-item">
-        <a href="./obat" class="nav-link">
+        <a href="/dokter/obat" class="nav-link">
             <i class="nav-icon fas fa-solid fa-pills"></i>
             <p>Obat</p>
         </a>

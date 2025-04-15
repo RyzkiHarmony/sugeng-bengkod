@@ -1,18 +1,12 @@
 @extends('layout.app')
 
-@section('title', 'Memeriksa')
+@section('title', 'Periksa')
 
 @section('nav-item')
     <li class="nav-item">
-        <a href="./memeriksa" class="nav-link">
-            <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
-            <p>Memeriksa</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="./obat" class="nav-link">
-            <i class="nav-icon fas fa-solid fa-pills"></i>
-            <p>Obat</p>
+        <a href="/pasien/periksa" class="nav-link">
+            <i class="nav-icon fas fa-sharp-duotone fa-solid fa-microscope"></i>
+            <p>Periksa</p>
         </a>
     </li>
 @endsection
@@ -23,12 +17,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Memeriksa</h1>
+                    <h1 class="m-0">Periksa</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                        <li class="breadcrumb-item active">Memeriksa</li>
+                        <li class="breadcrumb-item active">Periksa</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -41,9 +35,16 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                    <a href="/pasien/periksa/create" class="btn btn-sm btn-info mb-2 float-right">Periksa Online</a>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Responsive Hover Table</h3>
+                            <h3 class="card-title">Riwayat Periksa</h3>
 
                             <div class="card-tools">
                                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -64,26 +65,37 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Aksi</th>
+                                        <th>Dokter</th>
+                                        <th>Tanggal</th>
+                                        <th>Biaya</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if(count($memeriksas) > 0)
-                                        @foreach($memeriksas as $periksa)
+                                    @if(count($periksas) > 0)
+                                        @foreach($periksas as $periksa)
                                             <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $periksa->pasien->nama }}</td>
+                                                <td>{{ $loop->iteration ?? 'N/A' }}</td>
+                                                <td>{{ $periksa->dokter->nama ?? 'N/A' }}</td>
+                                                <td>{{ $periksa->tgl_periksa ?? 'N/A' }}</td>
+                                                <td>{{$periksa->biaya_periksa ? 'Rp ' . number_format($periksa->biaya_periksa, 0, ',', '.') : 'N/A'}}
+                                                </td>
                                                 <td>
-                                                    <a href="#" class="btn btn-sm btn-warning">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
+                                                    @if ($periksa->tgl_periksa)
+                                                        <span class="badge bg-success">
+                                                            Sudah Diperiksa
+                                                        </span>
+                                                    @else
+                                                        <span class="badge bg-warning">
+                                                            Belum Diperiksa
+                                                        </span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center">Tidak ada data pemeriksaan</td>
+                                            <td colspan="6" class="text-center">Tidak ada riwayat pemeriksaan</td>
                                         </tr>
                                     @endif
                                 </tbody>
