@@ -5,32 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\Periksa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PeriksaController extends Controller
 {
     public function index()
     {
-        $periksas = Periksa::latest()->get();
+        $user = Auth::user();
+
+        $periksas = Periksa::latest()->get()->where('id_pasien', $user->id);
 
         return view('pasien.periksa.index', compact('periksas'));
     }
     public function create()
     {
-        $pasiens = User::where('role', 'pasien')->latest()->get();
         $dokters = User::where('role', 'dokter')->latest()->get();
 
-        return view('pasien.periksa.create', compact('dokters', 'pasiens'));
+        return view('pasien.periksa.create', compact('dokters'));
     }
 
     public function store(Request $req)
     {
+        $user = Auth::user();
+
         $req->validate([
-            'id_pasien' => ['required', 'integer'],
             'id_dokter' => ['required', 'integer'],
         ]);
 
-        Periksa::create($req->all());
+        Periksa::create([
+            'id_pasien' => $user->id,
+            'id_dokter' => $req->id_dokter,
+        ]);
 
-        return redirect('pasien/periksa')->with('success', 'Berhasil Meminta Pemeriksaan');
+        return redirect('pasien/periksa')->with('success', 'Berhasil Membuat Jadwal Periksa');
     }
 }

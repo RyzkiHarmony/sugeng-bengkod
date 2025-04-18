@@ -10,7 +10,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a href="./obat" class="nav-link">
+    <a href="/dokter/obat" class="nav-link {{ request()->is('dokter/obat*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-solid fa-pills"></i>
         <p>Obat</p>
     </a>
@@ -49,7 +49,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">List Obat</h3>
+                        <h3 class="card-title">Daftar Obat</h3>
                         <div class="card-tools">
                             <div class="input-group input-group-sm mb-2" style="width: 150px;">
                                 <input type="text" name="table_search" class="form-control float-right"

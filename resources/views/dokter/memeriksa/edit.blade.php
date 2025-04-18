@@ -1,10 +1,10 @@
 @extends('layout.app')
 
-@section('title', 'Sugeng | Memeriksa')
+@section('title', 'Sugeng | Edit Pemeriksaan')
 
 @section('nav-item')
 <li class="nav-item">
-    <a href="/dokter/memeriksa" class="nav-link">
+    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
         <p>Memeriksa</p>
     </a>

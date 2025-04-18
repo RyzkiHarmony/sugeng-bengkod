@@ -50,10 +50,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a href="#" class="nav-link">Home</a>
                 </li>
             </ul>
 
@@ -110,7 +107,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Admin Cihuy</a>
+                        <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
                     </div>
                 </div>
 
@@ -134,7 +131,7 @@
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                         <li class="nav-item">
-                            <a href="./dashboard" class="nav-link">
+                            <a href="./dashboard" class="nav-link {{ request()->is('./dashboard*') ? 'active' : '' }} ">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </a>
@@ -143,10 +140,15 @@
                         @yield('nav-item')
 
                         <li class="nav-item">
-                            <a href="./logout" class="nav-link">
+                            <a href="#" class="nav-link"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="nav-icon fas fa-sharp fa-solid fa-door-open"></i>
                                 <p>Logout</p>
                             </a>
+
+                            <form action="/auth/logout" method="post" class="d-none" id="logout-form">
+                                @csrf
+                            </form>
                         </li>
                     </ul>
                 </nav>
@@ -182,7 +184,7 @@
     <script src="{{asset('lte\plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-        $.widget.bridge('uibutton', $.ui.button)
+    $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{asset('lte\plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>

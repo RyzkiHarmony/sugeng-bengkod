@@ -21,12 +21,11 @@
                         <div class="text-center mb-4">
                             <i class="fas fa-hospital text-primary fa-3x mb-3"></i>
                             <h3 class="fw-bold">Sugeng Poli</h3>
-                            <p class="text-muted">Login to access your account</p>
+                            <p class="text-muted">Login terlebih dahulu untuk menggunakan fitur</p>
                         </div>
 
                         <form action="/auth/login" method="POST">
-                            <!-- CSRF Token -->
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            @csrf
 
                             <!-- Email -->
                             <div class="mb-3">
@@ -35,8 +34,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-envelope"></i>
                                     </span>
-                                    <input type="email" class="form-control" id="email" name="email" required
-                                        autocomplete="email" autofocus>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Contoh: contoh@email.com" required autocomplete="email" autofocus>
                                 </div>
                             </div>
 
@@ -47,7 +46,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-lock"></i>
                                     </span>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Masukkan Password" required>
                                 </div>
                             </div>
 

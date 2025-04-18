@@ -25,17 +25,15 @@
                         </div>
 
                         <form action="/auth/register" method="POST">
-                            <!-- CSRF Token -->
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                            <!-- Name -->
+                            @csrf
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama Lengkap</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-user"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="nama" name="nama" required autofocus>
+                                    <input type="text" class="form-control" id="nama" name="nama"
+                                        placeholder="Masukkan Nama Lengkap" required autofocus>
                                 </div>
                             </div>
 
@@ -46,7 +44,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-map-marker-alt"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="alamat" name="alamat" required>
+                                    <input type="text" class="form-control" id="alamat" name="alamat"
+                                        placeholder="Masukkan Alamat" required>
                                 </div>
                             </div>
 
@@ -57,7 +56,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-phone"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="no_hp" name="no_hp" required>
+                                    <input type="text" class="form-control" id="no_hp" name="no_hp"
+                                        placeholder="Contoh: 08xxxxxxxxxx" required>
                                 </div>
                             </div>
 
@@ -68,7 +68,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-envelope"></i>
                                     </span>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Contoh: contoh@email.com" required>
                                 </div>
                             </div>
 
@@ -79,19 +80,8 @@
                                     <span class="input-group-text bg-light">
                                         <i class="fas fa-lock"></i>
                                     </span>
-                                    <input type="password" class="form-control" id="password" name="password" required>
-                                </div>
-                            </div>
-
-                            <!-- Confirm Password -->
-                            <div class="mb-3">
-                                <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                    <input type="password" class="form-control" id="password_confirmation"
-                                        name="password_confirmation" required>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Masukkan Password" required>
                                 </div>
                             </div>
 

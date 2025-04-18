@@ -6,12 +6,15 @@ use App\Models\DetailPeriksa;
 use App\Models\Obat;
 use App\Models\Periksa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MemeriksaController extends Controller
 {
     public function index()
     {
-        $memeriksas = Periksa::with('pasien')->get();
+        $user = Auth::user();
+
+        $memeriksas = Periksa::with('pasien')->get()->where('id_dokter', $user->id);
 
         return view('dokter.memeriksa.index', data: compact('memeriksas'));
     }

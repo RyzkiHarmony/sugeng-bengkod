@@ -4,7 +4,7 @@
 
 @section('nav-item')
 <li class="nav-item">
-    <a href="/dokter/memeriksa" class="nav-link">
+    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
         <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
         <p>Memeriksa</p>
     </a>
@@ -75,14 +75,16 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $memeriksa->pasien->nama }}</td>
                                     <td>
+                                        @if($memeriksa->tgl_periksa !== null)
                                         <a href="/dokter/memeriksa/{{ $memeriksa->id }}/edit"
                                             class="btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <a href="/dokter/memeriksa/{{ $memeriksa->id }}"
-                                            class="btn btn-sm btn-primary ml-2">
+                                        @else
+                                        <a href="/dokter/memeriksa/{{ $memeriksa->id }}" class="btn btn-sm btn-primary">
                                             <i class="fas fa-stethoscope"></i> Memeriksa
                                         </a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
