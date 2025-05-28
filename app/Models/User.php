@@ -18,9 +18,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'nama',
+        'name',
         'alamat',
         'no_hp',
+        'no_ktp',
+        'no_rm',
+        'id_poli',
         'role',
         'email',
         'password',
@@ -48,13 +51,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function periksa_pasien()
+
+    public function daftar_poli_pasien()
     {
-        return $this->hasMany(Periksa::class, 'id_pasien', 'id');
+        return $this->hasMany(DaftarPoli::class, 'id_pasien', 'id');
     }
 
-    public function periksa_dokter()
+    public function jadwal_periksa_dokter()
     {
-        return $this->hasMany(Periksa::class, 'id_dokter', 'id');
+        return $this->hasMany(JadwalPeriksa::class, 'id_dokter', 'id');
+    }
+
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'id_poli');
     }
 }

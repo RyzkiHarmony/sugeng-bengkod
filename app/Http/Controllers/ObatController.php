@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Obat;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\returnArgument;
 
 class ObatController extends Controller
 {

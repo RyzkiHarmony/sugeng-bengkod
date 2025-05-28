@@ -14,8 +14,11 @@ return new class extends Migration {
             $table->id();
             $table->string('nama');
             $table->string('alamat');
-            $table->string('no_hp');
-            $table->enum('role', ['dokter', 'pasien']);
+            $table->bigInteger('no_hp');
+            $table->bigInteger('no_ktp')->nullable();
+            $table->bigInteger('no_rm')->nullable();
+            $table->foreignId('id_poli')->nullable()->constrained('polis')->onDelete('set null');
+            $table->enum('role', ['dokter', 'pasien', 'admin']);
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

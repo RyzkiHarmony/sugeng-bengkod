@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('periksas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_pasien')->constrained('users')->OnDelete('cascade');
-            $table->foreignId('id_dokter')->constrained('users')->OnDelete('cascade');
+            $table->foreignId('id_daftar_poli')->constrained('daftar_polis')->OnDelete('cascade');
             $table->dateTime('tgl_periksa')->nullable();
             $table->longText('catatan')->nullable();
             $table->bigInteger('biaya_periksa')->nullable();

@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Periksa extends Model
 {
     protected $fillable = [
-        'id_pasien',
-        'id_dokter',
+        'id_daftar_poli',
         'tgl_periksa',
         'catatan',
         'biaya_periksa',
     ];
 
-    public function pasien()
+    public function daftar_poli()
     {
-        return $this->belongsTo(User::class, 'id_pasien');
-    }
-    public function dokter()
-    {
-        return $this->belongsTo(User::class, 'id_dokter');
+        return $this->belongsTo(DaftarPoli::class, 'id_daftar_poli');
     }
 
     public function detail_periksa_periksa()
