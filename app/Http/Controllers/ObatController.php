@@ -12,11 +12,11 @@ class ObatController extends Controller
         // $obats = Obat::latest()->get();
         $obats = Obat::latest()->paginate(5);
 
-        return view('dokter.obat.index', data: compact('obats'));
+        return view('admin.obat.index', data: compact('obats'));
     }
     public function create()
     {
-        return view('dokter.obat.create');
+        return view('admin.obat.create');
     }
 
     public function store(Request $req)
@@ -29,14 +29,14 @@ class ObatController extends Controller
 
         obat::create($req->all());
 
-        return redirect('dokter/obat')->with('success', 'Obat Berhasil Ditambahkan');
+        return redirect('admin/obat')->with('success', 'Obat Berhasil Ditambahkan');
     }
 
     public function edit($id)
     {
         $obat = Obat::find($id);
 
-        return view('dokter.obat.edit', compact('obat'));
+        return view('admin.obat.edit', compact('obat'));
     }
 
     public function update(Request $req, $id)
@@ -49,13 +49,13 @@ class ObatController extends Controller
 
         obat::find($id)->update($req->all());
 
-        return redirect('dokter/obat')->with('success', 'Obat Berhasil Diedit');
+        return redirect('admin/obat')->with('success', 'Obat Berhasil Diedit');
     }
 
     public function destroy($id)
     {
         Obat::find($id)->delete();
 
-        return redirect('/dokter/obat')->with('success', 'Obat Berhasil Dihapus');
+        return redirect('/admin/obat')->with('success', 'Obat Berhasil Dihapus');
     }
 }

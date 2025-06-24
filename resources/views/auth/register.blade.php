@@ -61,6 +61,18 @@
                                 </div>
                             </div>
 
+                            <!-- KTP Number -->
+                            <div class="mb-3">
+                                <label for="no_ktp" class="form-label">Nomor KTP</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light">
+                                        <i class="fas fa-id-card"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="no_ktp" name="no_ktp"
+                                        placeholder="Masukkan Nomor KTP" required>
+                                </div>
+                            </div>
+
                             <!-- Email -->
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email</label>
