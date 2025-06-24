@@ -11,19 +11,16 @@ class JadwalPeriksa extends Model
         'hari',
         'jam_mulai',
         'jam_selesai',
+        'status',
     ];
 
-    public function pasien()
+    public function dokter()
     {
-        return $this->belongsTo(User::class, 'id_pasien');
+        return $this->belongsTo(User::class, 'id_dokter');
     }
 
-    public function jadwal()
+    public function daftarPolis()
     {
-        return $this->belongsTo(JadwalPeriksa::class, 'id_jadwal');
-    }
-    public function periksa()
-    {
-        return $this->hasMany(Periksa::class, 'id_daftar_poli', 'id');
+        return $this->hasMany(DaftarPoli::class, 'id_jadwal');
     }
 }

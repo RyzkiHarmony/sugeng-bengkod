@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Poli;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class DokterController extends Controller
@@ -99,5 +100,41 @@ class DokterController extends Controller
         $dokter->delete();
 
         return redirect('/admin/dokter')->with('success', 'Dokter berhasil dihapus!');
+    }
+
+    /**
+     * Show the form for editing the authenticated doctor's profile.
+     */
+    public function editProfile()
+    {
+        $user = Auth::user();
+        $polis = Poli::all();
+        return view('dokter.profile.edit', compact('user', 'polis'));
+    }
+
+    /**
+     * Update the authenticated doctor's profile.
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string|max:500',
+            'no_hp' => 'required|string|max:20',
+            'id_poli' => 'required|exists:polis,id',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+        ]);
+
+        $user->update([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'id_poli' => $request->id_poli,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('dokter.profile.edit')->with('success', 'Profile berhasil diperbarui!');
     }
 }

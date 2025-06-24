@@ -4,15 +4,15 @@
 
 @section('nav-item')
 <li class="nav-item">
-    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
-        <p>Memeriksa</p>
+    <a href="/dokter/jadwal-periksa" class="nav-link {{ request()->is('dokter/jadwal-periksa*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-calendar-alt"></i>
+        <p>Jadwal Periksa</p>
     </a>
 </li>
 <li class="nav-item">
-    <a href="/dokter/obat" class="nav-link">
-        <i class="nav-icon fas fa-solid fa-pills"></i>
-        <p>Obat</p>
+    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-stethoscope"></i>
+        <p>Memeriksa</p>
     </a>
 </li>
 @endsection
@@ -38,6 +38,25 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
+        <!-- Flash Messages -->
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        @endif
+
         <div class="row">
             <!-- left column -->
             <div class="col-md-12">
@@ -47,27 +66,69 @@
                         <h3 class="card-title">Form Pemeriksaan</h3>
                     </div>
                     <!-- /.card-header -->
+                    <!-- Informasi Pasien -->
+                    <div class="card card-info mb-3">
+                        <div class="card-header">
+                            <h3 class="card-title">Informasi Pasien</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Nama Pasien</label>
+                                        <p class="form-control-static">{{ $janjiPeriksa->pasien->name ?? 'N/A' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">No. HP</label>
+                                        <p class="form-control-static">{{ $janjiPeriksa->pasien->no_hp ?? 'N/A' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Keluhan</label>
+                                        <p class="form-control-static">{{ $janjiPeriksa->keluhan ?? 'N/A' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="font-weight-bold">Jadwal</label>
+                                        <p class="form-control-static">
+                                            {{ $janjiPeriksa->jadwal->hari ?? 'N/A' }},
+                                            {{ $janjiPeriksa->jadwal->jam_mulai ?? 'N/A' }} -
+                                            {{ $janjiPeriksa->jadwal->jam_selesai ?? 'N/A' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- form start -->
-                    <form method="POST" action="/dokter/memeriksa">
+                    <form method="POST" action="{{ route('dokter.memeriksa.store') }}">
                         @csrf
-                        <!-- Tambahkan input hidden untuk menyimpan id_periksa -->
-                        <input type="hidden" name="id_periksa" value="{{ $periksa->id }}">
+                        <input type="hidden" name="id_daftar_poli" value="{{ $janjiPeriksa->id }}">
 
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="nama_pasien">Nama Pasien</label>
-                                <input type="text" class="form-control" id="nama_pasien" name="nama"
-                                    value="{{ $periksa->pasien->nama }}" placeholder="Masukkan Nama" readonly>
+                                <label for="tgl_periksa">Tanggal Periksa</label>
+                                <input type="datetime-local"
+                                    class="form-control @error('tgl_periksa') is-invalid @enderror" id="tgl_periksa"
+                                    name="tgl_periksa" value="{{ old('tgl_periksa', now()->format('Y-m-d\TH:i')) }}"
+                                    required>
+                                @error('tgl_periksa')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
-                                <label for="tgl">Tanggal</label>
-                                <input type="date" class="form-control" id="tgl" name="tgl_periksa"
-                                    placeholder="Masukkan Tanggal" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="catatan">Catatan</label>
-                                <input type="text" class="form-control" id="catatan" name="catatan"
-                                    placeholder="Berikan Catatan" required>
+                                <label for="catatan">Catatan Pemeriksaan</label>
+                                <textarea class="form-control @error('catatan') is-invalid @enderror" id="catatan"
+                                    name="catatan" rows="4"
+                                    placeholder="Masukkan catatan hasil pemeriksaan...">{{ old('catatan') }}</textarea>
+                                @error('catatan')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="form-group">
                                 <label>Obat</label>
@@ -109,15 +170,33 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="biaya">Biaya Periksa dan Obat</label>
-                                <input type="number" class="form-control" id="biaya" name="biaya_periksa"
-                                    placeholder="Masukkan Biaya Periksa" value="150000" readonly>
+                                <label for="biaya_periksa">Biaya Periksa</label>
+                                <!-- Hidden input for form submission -->
+                                <input type="hidden" id="biaya_periksa" name="biaya_periksa"
+                                    value="{{ old('biaya_periksa', 150000) }}">
+                                <!-- Display element for formatted price -->
+                                <div id="biaya_periksa_display" class="form-control bg-light" readonly>
+                                    Rp 150.000
+                                </div>
+                                <small class="form-text text-muted">
+                                    Biaya dihitung otomatis: Rp 150.000 (biaya dasar) + harga obat yang dipilih.
+                                </small>
+                                @error('biaya_periksa')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary float-right">Simpan</button>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('dokter.memeriksa.index') }}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Batal
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Simpan Pemeriksaan
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -128,153 +207,4 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-@endsection
-
-@section('scripts')
-<script>
-$(function() {
-    const obatSelect = document.getElementById('obat-select');
-    const selectedObatsList = document.getElementById('selected-obats-list');
-    const selectedObatsContainer = document.getElementById('selected-obats-container');
-    const clearAllBtn = document.getElementById('clear-all-obats');
-    const biayaInput = document.getElementById('biaya');
-
-    // Set default biaya to 150000
-    const defaultBiaya = 150000;
-    biayaInput.value = defaultBiaya;
-
-    // Set untuk menyimpan ID obat yang sudah dipilih
-    const selectedObats = new Set();
-
-    // Object to store obat prices
-    const obatPrices = {};
-
-    // Populate obatPrices with available obat data
-    document.querySelectorAll('#obat-select option').forEach(option => {
-        if (option.value !== 'Pilih Obat') {
-            // Get price from data-harga attribute if available
-            const harga = option.getAttribute('data-harga');
-            if (harga) {
-                obatPrices[option.value] = parseInt(harga);
-            } else {
-                // Extract price from option text (format: "nama_obat - kemasan - Rp xxx.xxx")
-                const priceText = option.text.split('Rp ')[1];
-                if (priceText) {
-                    // Convert formatted price (e.g., "150.000") to number (150000)
-                    const price = parseInt(priceText.replace(/\./g, ''));
-                    obatPrices[option.value] = price;
-                }
-            }
-        }
-    });
-
-    // Calculate total biaya based on selected obat
-    function calculateTotalBiaya() {
-        let total = defaultBiaya;
-
-        selectedObatsList.querySelectorAll('li').forEach(item => {
-            const obatId = item.dataset.id;
-            if (obatId && obatPrices[obatId]) {
-                total += obatPrices[obatId];
-            }
-        });
-
-        biayaInput.value = total;
-    }
-
-    // Inisialisasi obat yang sudah terpilih sebelumnya
-    document.querySelectorAll('#selected-obats-list li').forEach(item => {
-        selectedObats.add(item.dataset.id);
-    });
-
-    // Calculate initial total based on pre-selected obat
-    calculateTotalBiaya();
-
-    // Tambahkan obat ketika dipilih dari dropdown
-    obatSelect.addEventListener('change', function() {
-        const option = this.options[this.selectedIndex];
-        const obatId = option.value;
-        const obatText = option.text;
-
-        if (obatId && !selectedObats.has(obatId) && obatId !== 'Pilih Obat') {
-            // Buat elemen list item baru
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center';
-            li.dataset.id = obatId;
-
-            // Tambahkan data-harga jika tersedia di option
-            const harga = option.getAttribute('data-harga');
-            if (harga) {
-                li.dataset.harga = harga;
-            }
-
-            // Isi list item
-            li.innerHTML =
-                `${obatText}<button type="button" class="btn btn-sm btn-danger remove-obat"> <i class="fas fa-times"></i></button> <input type="hidden" name="obat[]" value="${obatId}">`;
-
-            // Tambahkan handler untuk tombol hapus
-            const removeBtn = li.querySelector('.remove-obat');
-            removeBtn.addEventListener('click', function() {
-                li.remove();
-                selectedObats.delete(obatId);
-
-                // Sembunyikan container jika tidak ada obat yang dipilih
-                if (selectedObatsList.children.length === 0) {
-                    selectedObatsContainer.style.display = 'none';
-                }
-
-                // Recalculate total biaya after removing obat
-                calculateTotalBiaya();
-            });
-
-            // Tampilkan container dan tambahkan item
-            selectedObatsContainer.style.display = 'block';
-            selectedObatsList.appendChild(li);
-
-            // Tambahkan ke set obat yang dipilih
-            selectedObats.add(obatId);
-
-            // Recalculate total biaya after adding obat
-            calculateTotalBiaya();
-        }
-
-        // Reset dropdown ke placeholder
-        this.selectedIndex = 0;
-    });
-
-    // Handler untuk tombol hapus pada item yang sudah ada
-    document.querySelectorAll('.remove-obat').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const li = this.closest('li');
-            const obatId = li.dataset.id;
-
-            li.remove();
-            selectedObats.delete(obatId);
-
-            // Sembunyikan container jika tidak ada obat yang dipilih
-            if (selectedObatsList.children.length === 0) {
-                selectedObatsContainer.style.display = 'none';
-            }
-
-            // Recalculate total biaya after removing obat
-            calculateTotalBiaya();
-        });
-    });
-
-    // Hapus semua obat yang dipilih
-    clearAllBtn.addEventListener('click', function() {
-        selectedObatsList.innerHTML = '';
-        selectedObats.clear();
-        selectedObatsContainer.style.display = 'none';
-
-        // Reset biaya to default after clearing all obat
-        biayaInput.value = defaultBiaya;
-    });
-
-    // Sembunyikan container jika tidak ada obat yang dipilih
-    if (selectedObatsList.children.length === 0) {
-        selectedObatsContainer.style.display = 'none';
-    }
-});
-</script>
 @endsection

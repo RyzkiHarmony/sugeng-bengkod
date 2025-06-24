@@ -13,9 +13,10 @@ return new class extends Migration {
         Schema::create('jadwal_periksas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_dokter')->constrained('users')->onDelete('cascade');
-            $table->date('hari');
+            $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']);
             $table->time('jam_mulai');
             $table->time('jam_selesai');
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

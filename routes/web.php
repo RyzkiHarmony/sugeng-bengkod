@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DaftarPoliController;
 use App\Http\Controllers\DokterController;
+use App\Http\Controllers\JadwalPeriksaController;
 use App\Http\Controllers\MemeriksaController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
-use App\Http\Controllers\PeriksaController;
 use App\Http\Controllers\PoliController;
+use App\Http\Controllers\RiwayatPeriksaController;
 use Illuminate\Support\Facades\Route;
 
 // Landing page
@@ -77,15 +79,25 @@ Route::prefix('dokter')->middleware('role:dokter')->group(function () {
         return view('dokter.index');
     })->name('dokter.dashboard');
 
-    
+    // Profile routes
+    Route::get('/profile/edit', [DokterController::class, "editProfile"])->name('dokter.profile.edit');
+    Route::put('/profile', [DokterController::class, "updateProfile"])->name('dokter.profile.update');
+
+    // Jadwal Periksa routes
+    Route::prefix('jadwal-periksa')->name('dokter.jadwalPeriksa.')->group(function () {
+        Route::get('/', [JadwalPeriksaController::class, "index"])->name('index');
+        Route::get('/create', [JadwalPeriksaController::class, "create"])->name('create');
+        Route::post('/', [JadwalPeriksaController::class, "store"])->name('store');
+        Route::put('/{id}', [JadwalPeriksaController::class, "update"])->name('update');
+    });
 
     // Memeriksa routes
-    Route::prefix('memeriksa')->group(function () {
-        Route::get('/', [MemeriksaController::class, "index"]);
-        Route::get('/{id}', [MemeriksaController::class, "memeriksa"]);
-        Route::post('/', [MemeriksaController::class, "store"]);
-        Route::get('/{id}/edit', [MemeriksaController::class, "edit"]);
-        Route::put('/{id}', [MemeriksaController::class, "update"]);
+    Route::prefix('memeriksa')->name('dokter.memeriksa.')->group(function () {
+        Route::get('/', [MemeriksaController::class, "index"])->name('index');
+        Route::get('/{id}/create', [MemeriksaController::class, "create"])->name('create');
+        Route::post('/', [MemeriksaController::class, "store"])->name('store');
+        Route::get('/history', [MemeriksaController::class, "history"])->name('history');
+        Route::get('/{id}/detail', [MemeriksaController::class, "detail"])->name('detail');
     });
 });
 
@@ -95,10 +107,16 @@ Route::prefix('pasien')->middleware('role:pasien')->group(function () {
         return view('pasien.index');
     })->name('pasien.dashboard');
 
-    // Periksa routes
-    Route::prefix('periksa')->group(function () {
-        Route::get('/', [PeriksaController::class, "index"]);
-        Route::get('/create', [PeriksaController::class, "create"]);
-        Route::post('/', [PeriksaController::class, "store"]);
+    // Daftar Poli / Janji Periksa routes
+    Route::prefix('daftar-poli')->name('pasien.daftar-poli.')->group(function () {
+        Route::get('/', [DaftarPoliController::class, "index"])->name('index');
+        Route::post('/', [DaftarPoliController::class, "store"])->name('store');
+    });
+
+    // Riwayat Periksa routes
+    Route::prefix('riwayat-periksa')->name('pasien.riwayat-periksa.')->group(function () {
+        Route::get('/', [RiwayatPeriksaController::class, "index"])->name('index');
+        Route::get('/{id}/detail', [RiwayatPeriksaController::class, "detail"])->name('detail');
+        Route::get('/{id}/riwayat', [RiwayatPeriksaController::class, "riwayat"])->name('riwayat');
     });
 });

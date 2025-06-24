@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DaftarPoli;
 use App\Models\DetailPeriksa;
 use App\Models\Obat;
 use App\Models\Periksa;
@@ -12,106 +13,92 @@ class MemeriksaController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $dokter = Auth::user();
 
-        $memeriksas = Periksa::with('pasien')->get()->where('id_dokter', $user->id);
+        // Ambil janji periksa yang belum diperiksa untuk dokter yang sedang login
+        $janjiPeriksas = DaftarPoli::with(['pasien', 'jadwal'])
+            ->whereHas('jadwal', function ($query) use ($dokter) {
+                $query->where('id_dokter', $dokter->id);
+            })
+            ->whereDoesntHave('periksa')
+            ->orderBy('no_antrian', 'asc')
+            ->get();
 
-        return view('dokter.memeriksa.index', data: compact('memeriksas'));
+        return view('dokter.memeriksa.index', compact('janjiPeriksas'));
     }
 
-    public function memeriksa($id)
+    public function create($id)
     {
-        $periksa = Periksa::find($id);
+        $janjiPeriksa = DaftarPoli::with(['pasien', 'jadwal'])->findOrFail($id);
         $obats = Obat::all();
-        $detail_periksa = DetailPeriksa::where('id_periksa', $id)->first();
 
-        $selected_obats = [];
-
-        return view('dokter.memeriksa.memeriksa', compact('detail_periksa', 'periksa', 'obats', 'selected_obats'));
+        return view('dokter.memeriksa.create', compact('janjiPeriksa', 'obats'));
     }
 
-    public function edit($id)
+    public function store(Request $request)
     {
-        $periksa = Periksa::find($id);
-        $obats = Obat::all();
-        $detail_periksa = DetailPeriksa::where('id_periksa', $id)->first();
-
-        $selected_obats = [];
-        if ($detail_periksa) {
-            $selected_obats = DetailPeriksa::where('id_periksa', $id)
-                ->pluck('id_obat')
-                ->toArray();
-        }
-
-        return view('dokter.memeriksa.edit', compact('detail_periksa', 'periksa', 'obats', 'selected_obats'));
-    }
-
-    public function store(Request $req)
-    {
-        // Validasi input
-        $req->validate([
+        $request->validate([
+            'id_daftar_poli' => 'required|exists:daftar_polis,id',
             'tgl_periksa' => 'required|date',
-            'catatan' => 'required|string',
-            'biaya_periksa' => 'required|numeric',
-            'obat' => 'nullable|array',
-            'obat.*' => 'exists:obats,id'
+            'catatan' => 'required|string|max:1000',
+            'biaya_periksa' => 'required|numeric|min:0',
+            'obat_ids' => 'array',
+            'obat_ids.*' => 'exists:obats,id'
         ]);
 
-        // Update data periksa
-        $periksa = Periksa::find($req->id_periksa ?? $req->route('id'));
-        $periksa->update([
-            'tgl_periksa' => $req->tgl_periksa,
-            'catatan' => $req->catatan,
-            'biaya_periksa' => $req->biaya_periksa
+        // Buat record periksa
+        $periksa = Periksa::create([
+            'id_daftar_poli' => $request->id_daftar_poli,
+            'tgl_periksa' => $request->tgl_periksa,
+            'catatan' => $request->catatan,
+            'biaya_periksa' => $request->biaya_periksa,
         ]);
 
-        // Hapus semua detail periksa yang ada untuk periksa ini
-        DetailPeriksa::where('id_periksa', $periksa->id)->delete();
-
-        // Tambahkan detail periksa baru jika ada obat yang dipilih
-        if ($req->has('obat') && !empty($req->obat)) {
-            foreach ($req->obat as $id_obat) {
+        // Simpan detail obat jika ada
+        if ($request->has('obat_ids') && is_array($request->obat_ids)) {
+            foreach ($request->obat_ids as $obat_id) {
                 DetailPeriksa::create([
                     'id_periksa' => $periksa->id,
-                    'id_obat' => $id_obat
+                    'id_obat' => $obat_id,
                 ]);
             }
         }
 
-        return redirect('dokter/memeriksa')->with('success', 'Data pemeriksaan berhasil disimpan');
+        return redirect()->route('dokter.memeriksa.index')
+            ->with('success', 'Pemeriksaan berhasil disimpan.');
     }
-    public function update(Request $req)
+
+    public function history()
     {
-        // Validasi input
-        $req->validate([
-            'tgl_periksa' => 'required|date',
-            'catatan' => 'required|string',
-            'biaya_periksa' => 'required|numeric',
-            'obat' => 'nullable|array',
-            'obat.*' => 'exists:obats,id'
-        ]);
+        $dokter = Auth::user();
 
-        // Update data periksa
-        $periksa = Periksa::find($req->id_periksa ?? $req->route('id'));
-        $periksa->update([
-            'tgl_periksa' => $req->tgl_periksa,
-            'catatan' => $req->catatan,
-            'biaya_periksa' => $req->biaya_periksa
-        ]);
+        // Ambil janji periksa yang sudah diperiksa untuk dokter yang sedang login
+        $janjiPeriksas = DaftarPoli::with(['pasien', 'jadwal', 'periksa'])
+            ->whereHas('jadwal', function ($query) use ($dokter) {
+                $query->where('id_dokter', $dokter->id);
+            })
+            ->whereHas('periksa')
+            ->get();
 
-        // Hapus semua detail periksa yang ada untuk periksa ini
-        DetailPeriksa::where('id_periksa', $periksa->id)->delete();
+        return view('dokter.memeriksa.history', compact('janjiPeriksas'));
+    }
 
-        // Tambahkan detail periksa baru jika ada obat yang dipilih
-        if ($req->has('obat') && !empty($req->obat)) {
-            foreach ($req->obat as $id_obat) {
-                DetailPeriksa::create([
-                    'id_periksa' => $periksa->id,
-                    'id_obat' => $id_obat
-                ]);
-            }
-        }
+    public function detail($id)
+    {
+        $dokter = Auth::user();
 
-        return redirect('dokter/memeriksa')->with('success', 'Data pemeriksaan berhasil disimpan');
+        // Ambil janji periksa dengan detail pemeriksaan
+        $janjiPeriksa = DaftarPoli::with([
+            'pasien',
+            'jadwal.dokter.poli',
+            'periksa.detailPeriksas.obat'
+        ])
+            ->whereHas('jadwal', function ($query) use ($dokter) {
+                $query->where('id_dokter', $dokter->id);
+            })
+            ->whereHas('periksa')
+            ->findOrFail($id);
+
+        return view('dokter.memeriksa.detail', compact('janjiPeriksa'));
     }
 }

@@ -4,15 +4,15 @@
 
 @section('nav-item')
 <li class="nav-item">
-    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
-        <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
-        <p>Memeriksa</p>
+    <a href="/dokter/jadwal-periksa" class="nav-link {{ request()->is('dokter/jadwal-periksa*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-calendar-alt"></i>
+        <p>Jadwal Periksa</p>
     </a>
 </li>
 <li class="nav-item">
-    <a href="/dokter/obat" class="nav-link">
-        <i class="nav-icon fas fa-solid fa-pills"></i>
-        <p>Obat</p>
+    <a href="/dokter/memeriksa" class="nav-link {{ request()->is('dokter/memeriksa*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-stethoscope"></i>
+        <p>Memeriksa</p>
     </a>
 </li>
 @endsection

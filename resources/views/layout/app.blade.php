@@ -107,7 +107,11 @@
                             alt="User Image">
                     </div>
                     <div class="info">
+                        @if(Auth::user()->role === 'dokter')
+                        <a href="{{ route('dokter.profile.edit') }}" class="d-block">{{ Auth::user()->nama }}</a>
+                        @else
                         <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
+                        @endif
                     </div>
                 </div>
 

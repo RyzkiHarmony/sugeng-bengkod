@@ -4,9 +4,15 @@
 
 @section('nav-item')
 <li class="nav-item">
-    <a href="./periksa" class="nav-link">
-        <i class="nav-icon fas fa-sharp-duotone fa-solid fa-microscope"></i>
-        <p>Periksa</p>
+    <a href="/pasien/daftar-poli" class="nav-link {{ request()->is('pasien/daftar-poli*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-calendar-plus"></i>
+        <p>Daftar Poli</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="/pasien/riwayat-periksa" class="nav-link {{ request()->is('pasien/riwayat-periksa*') ? 'active' : '' }}">
+        <i class="nav-icon fas fa-history"></i>
+        <p>Riwayat Periksa</p>
     </a>
 </li>
 @endsection
